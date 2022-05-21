@@ -4,7 +4,9 @@ import design
 import os
 import pyqtgraph as pg
 
-import numpy as np
+from distribution import plots
+
+plots.show(size=100)
 
 styles = {'color': 'black', 'font-size': '20px'}
 hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
