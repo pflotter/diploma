@@ -1,15 +1,13 @@
 import sys
 from PyQt5 import QtWidgets
 import design
-import os
+import pandas as pd
 import pyqtgraph as pg
 
-import numpy as np
-
 styles = {'color': 'black', 'font-size': '20px'}
-hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-temperature_1 = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45]
-temperature_2 = [50, 35, 44, 22, 38, 32, 27, 38, 32, 44]
+hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+temperature_1 = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45, 24, 56]
+temperature_2 = [50, 35, 44, 22, 38, 32, 27, 38, 32, 44, 65, 11]
 
 
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
@@ -30,11 +28,43 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.plot(hour, temperature_2, "Измерение_1", 'black')
         #################
 
-        self.btnLoad.clicked.connect(self.browse_folder)
-        self.btnSave.clicked.connect(self.browse_folder)
+        #self.btnLoad.clicked.connect(lambda _, xl_path=excel_file_path, sheet_name=worksheet_name: self.loadExcelData(xl_path, sheet_name))
+        self.btnLoad.clicked.connect(self.loadExcelData)
+        self.btnSave.clicked.connect(self.saveExcelData)
         self.btnAddData.clicked.connect(self.addRow)
         self.btnDeleteData.clicked.connect(self.removeRow)
         self.btnCopy.clicked.connect(self.copyRow)
+        #################
+
+    def saveExcelData(self):
+        rep = QtWidgets.QFileDialog.getSaveFileName()
+        print(rep)
+
+    #def loadExcelData(self, excel_file_dir, worksheet_name):
+    def loadExcelData(self):
+        rep = QtWidgets.QFileDialog.getOpenFileName(self, 'Выбор файла для загрузки', '', 'XLS File (*.xls*)')
+                #getSaveFileName()
+                #df = pd.read_excel(excel_file_dir, worksheet_name)
+
+        df = pd.read_excel(rep[0])
+        if df.size == 0:
+            return
+
+        df.fillna('', inplace=True)
+        self.tableWidget.setRowCount(df.shape[0])
+        self.tableWidget.setColumnCount(df.shape[1])
+        self.tableWidget.setHorizontalHeaderLabels(df.columns)
+
+        #   returns pandas array object
+        for row in df.iterrows():
+            values = row[1]
+            for col_index, value in enumerate(values):
+                if isinstance(value, (float, int)):
+                    value = '{0:0,.0f}'.format(value)
+                tableItem = QtWidgets.QTableWidgetItem(str(value))
+                self.tableWidget.setItem(row[0], col_index, tableItem)
+
+        self.tableWidget.setColumnWidth(2, 300)
 
     def addRow(self):
         currentRow = self.tableWidget.currentRow()
@@ -62,14 +92,6 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         pen = pg.mkPen(color=color)
         self.graphWidget.plot(x, y, name=plotname, pen=pen, symbol='+', symbolSize=15, symbolBrush=(color))
 
-    def browse_folder(self):
-        # self.listWidget.clear()
-        directory = QtWidgets.QFileDialog.getExistingDirectory(self, "Выберите папку")
-        # if directory:
-        #  for file_name in os.listdir(directory):
-        #      self.listWidget.addItem(file_name)
-
-
 def main():
     app = QtWidgets.QApplication(sys.argv)
     window = ExampleApp()
@@ -77,6 +99,7 @@ def main():
     window.show()
     app.exec()
 
-
 if __name__ == '__main__':
+    #excel_file_path = 'data_test.xlsx'
+    #worksheet_name = 'Sheet1'
     main()
