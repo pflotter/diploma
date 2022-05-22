@@ -76,14 +76,19 @@ def show_example(size: int) -> None:
 
 
 def show_plot(title: str = "current row", data: np.array = []) -> None:
-    # if not data:
-    #     data = np.random.normal(size=1000)
-
     sns.kdeplot(data=data)
     ax = plt.subplot()
     ax.grid()
     ax.set_xlabel(title)
     plt.show()
+
+
+def get_y_plot_values(data: np.array) -> [np.array, np.array]:
+    plot = sns.kdeplot(data=data)
+    line = plot.lines[0]
+    x, y = line.get_data()
+    return x, y
+
 
 
 if __name__ == "__main__":
