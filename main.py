@@ -10,10 +10,10 @@ from distribution import plots
 from distribution import definition
 
 
-styles = {'color': 'black', 'font-size': '20px'}
-hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-temperature_1 = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45, 24, 56]
-temperature_2 = [50, 35, 44, 22, 38, 32, 27, 38, 32, 44, 65, 11]
+styles = {'color': 'black', 'font-size': '12px'}
+#hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+#temperature_1 = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45, 24, 56]
+#temperature_2 = [50, 35, 44, 22, 38, 32, 27, 38, 32, 44, 65, 11]
 
 # distribution.definition.check_pearson_correlation_coefficient(temperature_1)
 # distribution.plots.show_plot(title="temp1", data=temperature_1)
@@ -29,49 +29,32 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
         self.smt = []
 
-        # Generate demo-plot
-        #temperature_3 =
-        #print(temperature_3)
-        #x1, y1 = distribution.plots.get_y_plot_values(temperature_2)
-        # x2, y2 = distribution.plots.get_y_plot_values(temperature_2)
-
-        # print(x, y)
-
         self.graphWidget.setBackground('#bbccaa')
-        self.graphWidget.setTitle("Демонстрационный пример", color="black", size="22pt")
-        self.graphWidget.setLabel('left', 'Температура (°C)', **styles)
+        self.graphWidget.setTitle("Демонстрационный пример", **styles)
+        self.graphWidget.setLabel('left', 'Частота выявлений', **styles)
         self.graphWidget.setLabel('bottom', 'Частота выявлений', **styles)
         self.graphWidget.showGrid(x=True, y=True)
-        #self.graphWidget.addLegend()
-        '''self.graphWidget.setXRange(min(x1), max(x1), padding=0)
-        self.graphWidget.setYRange(min(y1), max(y1), padding=0)
-        # self.plot(x2, y2, "Измерение_2", 'r')
-
-        self.plot(x1, y1, "Измерение_1", 'black')'''
-
 
         # connect buttons with 'def'
         self.btnLoad.clicked.connect(self.loadExcelData)
         self.btnSave.clicked.connect(self.saveExcelData)
         self.btnAddData.clicked.connect(self.addButton)
         self.btnDeleteData.clicked.connect(self.removeButton)
-        self.btnCopy.clicked.connect(self.test)
-        self.pushButton_3.clicked.connect(self.updateGraphData)
+        self.btnPirson.clicked.connect(self.addDataForGraph)
+        self.btnPlotGraphics.clicked.connect(self.updateGraphData)
 
         # generate test-data (only for save)
-        '''self.loadData()'''
+        #self.loadData()
 
     # plot graph
     def updateGraphData(self):
         x1, y1 = distribution.plots.get_y_plot_values(self.smt)
-        # self.graphWidget.addLegend()
-        #self.graphWidget.setXRange(min(x1), max(x1), padding=0)
-        #self.graphWidget.setYRange(min(y1), max(y1), padding=0)
-        # self.plot(x2, y2, "Измерение_2", 'r')
+
         distribution.plots.show_plot(self.smt)
-        self.plot(x1, y1, "Измерение_1", 'black')
+        self.plot(x1, y1, "", 'black')
 
     # save to .xlsx
     def saveExcelData(self):
@@ -91,13 +74,25 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         df.to_excel(rep[0], index=False)
         print('Excel file exported.')
 
-    def test(self):
+    def addDataForGraph(self):
         temp = []
+        temp_1 = []
+
         for i in range(self.tableWidget.rowCount()):
             temp.append(self.tableWidget.item(i, 0).text())
+
         temp = list(map(int, temp))
         print(temp)
         self.smt = temp
+
+        temp_1 = distribution.definition.check_pearson_correlation_coefficient(self.smt)
+        print(temp_1)
+
+        self.lineMathMean.setText(temp_1[0])
+        self.lineStd.setText(temp_1[1])
+        self.lineCorrNormal.setText(temp_1[2])
+        self.lineCorrLogistic.setText(temp_1[3])
+        self.lineCorrRavnomer.setText(temp_1[4])
 
     # upload from .xlsx
     def loadExcelData(self):
@@ -247,7 +242,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     # create graphics, etc.
     def plot(self, x, y, plotname, color):
         pen = pg.mkPen(color=color)
-        self.graphWidget.plot(x, y, name=plotname, pen=pen, symbolSize=15, symbolBrush=(color))
+        self.graphWidget.plot(x, y, name=plotname, pen=pen, symbolSize=12, symbolBrush=(color))
 
     # generate data (only for save .xlsx)
     def loadData(self):

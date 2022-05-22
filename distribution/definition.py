@@ -4,6 +4,7 @@ import numpy as np
 
 def check_pearson_correlation_coefficient(data: np.array) -> None:
     data.sort()
+    temp = []
 
     print("Мат ожидание", str(round(np.mean(data), 3)))
     print("СКО", str(round(np.std(data), 3)))
@@ -16,4 +17,7 @@ def check_pearson_correlation_coefficient(data: np.array) -> None:
     print("Корреляция между нормальным распределением и тестовым ", str(round(pearsonr(pn, p)[0], 3)))
     print("Корреляция между логистическим распределением и тестовым ", str(round(pearsonr(pl, p)[0], 3)))
     print("Корреляция между равномерным  распределением и тестовым ", str(round(pearsonr(pu, p)[0], 3)))
+
+    temp = [str(round(np.mean(data), 3)), str(round(np.std(data), 3)), str(round(pearsonr(pn, p)[0], 3)), str(round(pearsonr(pl, p)[0], 3)), str(round(pearsonr(pu, p)[0], 3))]
+    return temp
 

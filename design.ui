@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1156</width>
-    <height>972</height>
+    <width>847</width>
+    <height>646</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -75,9 +75,9 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="btnPirson">
         <property name="text">
-         <string>Построение графиков</string>
+         <string>Коэффициент Пирсона</string>
         </property>
         <property name="icon">
          <iconset>
@@ -129,7 +129,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="btnSettings">
         <property name="text">
          <string>Настройки</string>
         </property>
@@ -216,7 +216,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox_2">
+             <widget class="QSpinBox" name="spinBoxCount">
               <property name="enabled">
                <bool>true</bool>
               </property>
@@ -293,7 +293,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="btnCopy">
+             <widget class="QPushButton" name="btnCopyData">
               <property name="text">
                <string>Дублировать</string>
               </property>
@@ -325,25 +325,116 @@
          <widget class="PlotWidget" name="graphWidget" native="true"/>
         </item>
         <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="lineMathMean">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="dragEnabled">
+             <bool>false</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLineEdit" name="lineStd">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Средне квадратичное отклонение</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="MathMean">
+            <property name="text">
+             <string>Мат. Ожидание</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLineEdit" name="lineCorrNormal">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Корреляция между нормальным распределением</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLineEdit" name="lineCorrLogistic">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="frame">
+             <bool>true</bool>
+            </property>
+            <property name="echoMode">
+             <enum>QLineEdit::Normal</enum>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string/>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLineEdit" name="lineCorrRavnomer">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Корреляция с логистическим распределением</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Корреляция с равномерным распределением</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
-           <widget class="QPushButton" name="pushButton_7">
+           <widget class="QPushButton" name="btnPlotGraphics">
             <property name="text">
              <string>Построить график</string>
             </property>
@@ -361,66 +452,6 @@
     </item>
    </layout>
   </widget>
-  <action name="action">
-   <property name="text">
-    <string>Раз</string>
-   </property>
-  </action>
-  <action name="action_2">
-   <property name="text">
-    <string>Два</string>
-   </property>
-  </action>
-  <action name="action_4">
-   <property name="text">
-    <string>Три</string>
-   </property>
-  </action>
-  <action name="action_5">
-   <property name="text">
-    <string>Четыре</string>
-   </property>
-  </action>
-  <action name="action_6">
-   <property name="text">
-    <string>Раз</string>
-   </property>
-  </action>
-  <action name="action_7">
-   <property name="text">
-    <string>Два</string>
-   </property>
-  </action>
-  <action name="action_9">
-   <property name="text">
-    <string>Три</string>
-   </property>
-  </action>
-  <action name="action_10">
-   <property name="text">
-    <string>Раз</string>
-   </property>
-  </action>
-  <action name="action_12">
-   <property name="text">
-    <string>Два</string>
-   </property>
-  </action>
-  <action name="action_13">
-   <property name="text">
-    <string>Раз</string>
-   </property>
-  </action>
-  <action name="action_15">
-   <property name="text">
-    <string>Два</string>
-   </property>
-  </action>
-  <action name="action_16">
-   <property name="text">
-    <string>Три</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
