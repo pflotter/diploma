@@ -15,9 +15,11 @@ hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 temperature_1 = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45, 24, 56]
 temperature_2 = [50, 35, 44, 22, 38, 32, 27, 38, 32, 44, 65, 11]
 
-distribution.definition.check_pearson_correlation_coefficient(temperature_1)
-distribution.plots.show_plot(title="temp1", data=temperature_1)
-
+# distribution.definition.check_pearson_correlation_coefficient(temperature_1)
+# distribution.plots.show_plot(title="temp1", data=temperature_1)
+# tmp = distribution.plots.get_y_plot_values(temperature_1)[0]
+# print(tmp[0])
+#
 
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
@@ -25,16 +27,23 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.setupUi(self)
 
         # Generate demo-plot
+        x1, y1 = distribution.plots.get_y_plot_values(temperature_2)
+        # x2, y2 = distribution.plots.get_y_plot_values(temperature_2)
+
+        # print(x, y)
+
         self.graphWidget.setBackground('#bbccaa')
         self.graphWidget.setTitle("Демонстрационный пример", color="black", size="22pt")
         self.graphWidget.setLabel('left', 'Температура (°C)', **styles)
         self.graphWidget.setLabel('bottom', 'Время (ч)', **styles)
         self.graphWidget.showGrid(x=True, y=True)
         self.graphWidget.addLegend()
-        self.graphWidget.setXRange(0, 11, padding=0)
-        self.graphWidget.setYRange(20, 55, padding=0)
-        self.plot(hour, temperature_1, "Измерение_1", 'r')
-        self.plot(hour, temperature_2, "Измерение_1", 'black')
+        self.graphWidget.setXRange(min(x1), max(x1), padding=0)
+        self.graphWidget.setYRange(min(y1), max(y1), padding=0)
+        # self.plot(x2, y2, "Измерение_2", 'r')
+        self.plot(x1, y1, "Измерение_1", 'black')
+
+
 
         # connect buttons with 'def'
         self.btnLoad.clicked.connect(self.loadExcelData)
@@ -93,7 +102,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.tableWidget.setColumnWidth(2, 300)
 
     # add rows in tableWidget
-    def addButton(self):
+    def addButton2(self):
 
         # if radio selected Rows
         if self.radioVariables.isChecked():
@@ -134,6 +143,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 count = self.spinBox_2.value()
                 for i in range(count):
                     self.tableWidget.insertColumn(currentColumn)
+
 
     # remove rows in tableWidget
     def removeButton(self):
@@ -180,7 +190,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     # create graphics, etc.
     def plot(self, x, y, plotname, color):
         pen = pg.mkPen(color=color)
-        self.graphWidget.plot(x, y, name=plotname, pen=pen, symbol='+', symbolSize=15, symbolBrush=(color))
+        self.graphWidget.plot(x, y, name=plotname, pen=pen, symbolSize=15, symbolBrush=(color))
 
     # generate data (only for save .xlsx)
     def loadData(self):
@@ -205,6 +215,7 @@ def main():
     window.setWindowTitle("Учёт статистики")
     window.show()
     app.exec()
+
 
 if __name__ == '__main__':
     main()
