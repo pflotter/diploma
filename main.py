@@ -3,15 +3,20 @@ from PyQt5 import QtWidgets
 import design
 import os
 import pyqtgraph as pg
+import numpy as np
 
+import distribution
 from distribution import plots
+from distribution import definition
 
-plots.show(size=100)
 
 styles = {'color': 'black', 'font-size': '20px'}
 hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 temperature_1 = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45]
 temperature_2 = [50, 35, 44, 22, 38, 32, 27, 38, 32, 44]
+
+distribution.definition.check_pearson_correlation_coefficient(temperature_1)
+distribution.plots.show_plot(title="temp1", data=temperature_1)
 
 
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
