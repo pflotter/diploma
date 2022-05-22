@@ -29,9 +29,12 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.smt = []
 
         # Generate demo-plot
-        x1, y1 = distribution.plots.get_y_plot_values(temperature_2)
+        #temperature_3 =
+        #print(temperature_3)
+        #x1, y1 = distribution.plots.get_y_plot_values(temperature_2)
         # x2, y2 = distribution.plots.get_y_plot_values(temperature_2)
 
         # print(x, y)
@@ -39,14 +42,14 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.graphWidget.setBackground('#bbccaa')
         self.graphWidget.setTitle("Демонстрационный пример", color="black", size="22pt")
         self.graphWidget.setLabel('left', 'Температура (°C)', **styles)
-        self.graphWidget.setLabel('bottom', 'Время (ч)', **styles)
+        self.graphWidget.setLabel('bottom', 'Частота выявлений', **styles)
         self.graphWidget.showGrid(x=True, y=True)
-        self.graphWidget.addLegend()
-        self.graphWidget.setXRange(min(x1), max(x1), padding=0)
+        #self.graphWidget.addLegend()
+        '''self.graphWidget.setXRange(min(x1), max(x1), padding=0)
         self.graphWidget.setYRange(min(y1), max(y1), padding=0)
         # self.plot(x2, y2, "Измерение_2", 'r')
-        self.plot(x1, y1, "Измерение_1", 'black')
 
+        self.plot(x1, y1, "Измерение_1", 'black')'''
 
 
         # connect buttons with 'def'
@@ -54,11 +57,21 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.btnSave.clicked.connect(self.saveExcelData)
         self.btnAddData.clicked.connect(self.addButton)
         self.btnDeleteData.clicked.connect(self.removeButton)
-        self.btnCopy.clicked.connect(self.copyRow)
+        self.btnCopy.clicked.connect(self.test)
+        self.pushButton_3.clicked.connect(self.updateGraphData)
 
         # generate test-data (only for save)
-        self.loadData()
-        self.radioData.setChecked(True)
+        '''self.loadData()'''
+
+    # plot graph
+    def updateGraphData(self):
+        x1, y1 = distribution.plots.get_y_plot_values(self.smt)
+        # self.graphWidget.addLegend()
+        #self.graphWidget.setXRange(min(x1), max(x1), padding=0)
+        #self.graphWidget.setYRange(min(y1), max(y1), padding=0)
+        # self.plot(x2, y2, "Измерение_2", 'r')
+        distribution.plots.show_plot(self.smt)
+        self.plot(x1, y1, "Измерение_1", 'black')
 
     # save to .xlsx
     def saveExcelData(self):
@@ -75,10 +88,16 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         for row in range(self.tableWidget.rowCount()):
             for col in range(self.tableWidget.columnCount()):
                 df.at[row, columnHeaders[col]] = self.tableWidget.item(row, col).text()
-
         df.to_excel(rep[0], index=False)
         print('Excel file exported.')
 
+    def test(self):
+        temp = []
+        for i in range(self.tableWidget.rowCount()):
+            temp.append(self.tableWidget.item(i, 0).text())
+        temp = list(map(int, temp))
+        print(temp)
+        self.smt = temp
 
     # upload from .xlsx
     def loadExcelData(self):
@@ -106,7 +125,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.tableWidget.setColumnWidth(2, 300)
 
     # add rows in tableWidget
-    def addButton2(self):
+    def addButton(self):
 
         # if radio selected Rows
         if self.radioData.isChecked():

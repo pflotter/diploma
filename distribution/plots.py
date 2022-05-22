@@ -84,6 +84,8 @@ def show_plot(title: str = "current row", data: np.array = []) -> None:
 
 
 def get_y_plot_values(data: np.array) -> [np.array, np.array]:
+    if len(data) == 0:
+        print('хуйня идея')
     plot = sns.kdeplot(data=data)
     line = plot.lines[0]
     x, y = line.get_data()
