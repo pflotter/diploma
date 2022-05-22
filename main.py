@@ -15,8 +15,8 @@ hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 temperature_1 = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45, 24, 56]
 temperature_2 = [50, 35, 44, 22, 38, 32, 27, 38, 32, 44, 65, 11]
 
-distribution.definition.check_pearson_correlation_coefficient(temperature_1)
-distribution.plots.show_plot(title="temp1", data=temperature_1)
+#distribution.definition.check_pearson_correlation_coefficient(temperature_1)
+#distribution.plots.show_plot(title="temp1", data=temperature_1)
 
 
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
@@ -96,11 +96,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def addButton(self):
 
         # if radio selected Rows
-        if self.radioVariables.isChecked():
-            # change radioData
-            # on
-            # radioVariables
-            # in design.ui
+        if self.radioData.isChecked():
 
             # change after last selected Item
             if self.tableWidget.selectedIndexes():
@@ -135,35 +131,68 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 for i in range(count):
                     self.tableWidget.insertColumn(currentColumn)
 
+        # clearing WidgetTable
+        if self.tableWidget.rowCount() < 1 or self.tableWidget.columnCount() < 1:
+            self.tableWidget.setColumnCount(0)
+            self.tableWidget.setRowCount(0)
+
     # remove rows in tableWidget
     def removeButton(self):
 
         # if radio selected Rows
-        if self.radioVariables.isChecked():
-            # change radioData
-            # on
-            # radioVariables
-            # in design.ui
+        if self.radioData.isChecked():
 
             # change to tail (default)
             if self.tableWidget.rowCount() > 0:
-                currentRow = self.tableWidget.rowCount()
-                count = self.spinBox_2.value()
-                for i in range(count):
-                    self.tableWidget.removeRow(currentRow - 1)
+
+                # change selected Items
+                if self.tableWidget.selectedIndexes():
+                    index_list = []
+
+                    # fill index_list
+                    for model_index in self.tableWidget.selectedIndexes():
+                        index_list.append(model_index.row())
+
+                    # remove duplicate from index_list
+                    list_index = list(set(index_list))
+                    list_index.sort(reverse=True)
+
+                    for index in list_index:
+                        self.tableWidget.removeRow(index)
+
+                else:
+                    currentRow = self.tableWidget.rowCount()
+                    count = self.spinBox_2.value()
+                    for i in range(count):
+                        self.tableWidget.removeRow(currentRow - 1)
 
         # if radio selected Columns
         else:
-
-            # change to tail (default)
             if self.tableWidget.columnCount() > 0:
-                currentColumn = self.tableWidget.columnCount()
-                count = self.spinBox_2.value()
-                for i in range(count):
-                    self.tableWidget.removeColumn(currentColumn - 1)
 
+                # change selected Items
+                if self.tableWidget.selectedIndexes():
+                    index_list = []
+
+                    # fill index_list
+                    for model_index in self.tableWidget.selectedIndexes():
+                        index_list.append(model_index.column())
+
+                    # remove duplicate from index_list
+                    list_index = list(set(index_list))
+                    list_index.sort(reverse=True)
+
+                    for index in list_index:
+                        self.tableWidget.removeColumn(index)
+
+                else:
+                    currentColumn = self.tableWidget.columnCount()
+                    count = self.spinBox_2.value()
+                    for i in range(count):
+                        self.tableWidget.removeColumn(currentColumn - 1)
+                    
         # clearing WidgetTable
-        if self.tableWidget.rowCount() == 0 or self.tableWidget.columnCount() == 0:
+        if self.tableWidget.rowCount() < 1 or self.tableWidget.columnCount() < 1:
             self.tableWidget.setColumnCount(0)
             self.tableWidget.setRowCount(0)
 
