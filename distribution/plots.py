@@ -1,6 +1,7 @@
 import scipy.stats
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 def show_distribution(title: str,
@@ -68,15 +69,22 @@ def show_logistic(size: int = 100) -> None:
                       random_values)
 
 
-def show(size: int) -> None:
+def show_example(size: int) -> None:
     show_normal(size)
     show_uniform(size)
     show_logistic(size)
 
 
+def show_plot(title: str = "current row", data: np.array = []) -> None:
+    # if not data:
+    #     data = np.random.normal(size=1000)
+
+    sns.kdeplot(data=data)
+    ax = plt.subplot()
+    ax.grid()
+    ax.set_xlabel(title)
+    plt.show()
+
+
 if __name__ == "__main__":
-    show_normal(size=100)
-    show_uniform(size=100)
-    show_logistic(size=100)
-
-
+    show_example(size=100)
