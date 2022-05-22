@@ -21,6 +21,10 @@ temperature_2 = [50, 35, 44, 22, 38, 32, 27, 38, 32, 44, 65, 11]
 # print(tmp[0])
 #
 
+#distribution.definition.check_pearson_correlation_coefficient(temperature_1)
+#distribution.plots.show_plot(title="temp1", data=temperature_1)
+
+
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -54,7 +58,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         # generate test-data (only for save)
         self.loadData()
-        self.radioVariables.setChecked(True)
+        self.radioData.setChecked(True)
 
     # save to .xlsx
     def saveExcelData(self):
@@ -105,19 +109,11 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def addButton2(self):
 
         # if radio selected Rows
-        if self.radioVariables.isChecked():
-            # change radioData
-            # on
-            # radioVariables
-            # in design.ui
+        if self.radioData.isChecked():
 
             # change after last selected Item
             if self.tableWidget.selectedIndexes():
-                for i in self.tableWidget.selectedIndexes():
-                    currentRow = i.row()
-                count = self.spinBox_2.value()
-                for i in range(count):
-                    self.tableWidget.insertRow(currentRow + 1)
+                self.uniformAddingData()
 
             # change to tail (default)
             else:
@@ -131,11 +127,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
             # change after last selected Item
             if self.tableWidget.selectedIndexes():
-                for i in self.tableWidget.selectedIndexes():
-                    currentColumn = i.column()
-                count = self.spinBox_2.value()
-                for i in range(count):
-                    self.tableWidget.insertColumn(currentColumn + 1)
+                self.uniformAddingData()
 
             # change to tail (default)
             else:
@@ -145,37 +137,83 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                     self.tableWidget.insertColumn(currentColumn)
 
 
+        # clearing WidgetTable
+        if self.tableWidget.rowCount() < 1 or self.tableWidget.columnCount() < 1:
+            self.tableWidget.setColumnCount(0)
+            self.tableWidget.setRowCount(0)
+
     # remove rows in tableWidget
     def removeButton(self):
 
         # if radio selected Rows
-        if self.radioVariables.isChecked():
-            # change radioData
-            # on
-            # radioVariables
-            # in design.ui
+        if self.radioData.isChecked():
 
             # change to tail (default)
             if self.tableWidget.rowCount() > 0:
-                currentRow = self.tableWidget.rowCount()
-                count = self.spinBox_2.value()
-                for i in range(count):
-                    self.tableWidget.removeRow(currentRow - 1)
+
+                # change selected Items
+                if self.tableWidget.selectedIndexes():
+                    index_list = []
+
+                    # fill index_list
+                    for model_index in self.tableWidget.selectedIndexes():
+                        index_list.append(model_index.row())
+
+                    # remove duplicate from index_list
+                    list_index = list(set(index_list))
+                    list_index.sort(reverse=True)
+
+                    for index in list_index:
+                        self.tableWidget.removeRow(index)
+
+                else:
+                    currentRow = self.tableWidget.rowCount()
+                    count = self.spinBox_2.value()
+                    for i in range(count):
+                        self.tableWidget.removeRow(currentRow - 1)
 
         # if radio selected Columns
         else:
-
-            # change to tail (default)
             if self.tableWidget.columnCount() > 0:
-                currentColumn = self.tableWidget.columnCount()
-                count = self.spinBox_2.value()
-                for i in range(count):
-                    self.tableWidget.removeColumn(currentColumn - 1)
 
+                # change selected Items
+                if self.tableWidget.selectedIndexes():
+                    index_list = []
+
+                    # fill index_list
+                    for model_index in self.tableWidget.selectedIndexes():
+                        index_list.append(model_index.column())
+
+                    # remove duplicate from index_list
+                    list_index = list(set(index_list))
+                    list_index.sort(reverse=True)
+
+                    for index in list_index:
+                        self.tableWidget.removeColumn(index)
+
+                else:
+                    currentColumn = self.tableWidget.columnCount()
+                    count = self.spinBox_2.value()
+                    for i in range(count):
+                        self.tableWidget.removeColumn(currentColumn - 1)
+                    
         # clearing WidgetTable
-        if self.tableWidget.rowCount() == 0 or self.tableWidget.columnCount() == 0:
+        if self.tableWidget.rowCount() < 1 or self.tableWidget.columnCount() < 1:
             self.tableWidget.setColumnCount(0)
             self.tableWidget.setRowCount(0)
+
+    def uniformAddingData(self):
+            for i in self.tableWidget.selectedIndexes():
+                currentRow = i.row()
+                currentColumn = i.column()
+
+            count = self.spinBox_2.value()
+            if self.radioData.isChecked():
+                for i in range(count):
+                    self.tableWidget.insertRow(currentRow + 1)
+            else:
+                for i in range(count):
+                    self.tableWidget.insertColumn(currentColumn + 1)
 
     # copy rows in tableWidget
     def copyRow(self):
