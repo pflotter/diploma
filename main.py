@@ -30,17 +30,17 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         # connect buttons with 'def'
         self.btnLoad.clicked.connect(self.loadExcelData)
         self.btnSave.clicked.connect(self.saveExcelData)
-        self.btnAddData.clicked.connect(self.addRow)
-        self.btnDeleteData.clicked.connect(self.removeRow)
+        self.btnAddData.clicked.connect(self.addButton)
+        self.btnDeleteData.clicked.connect(self.removeButton)
         self.btnCopy.clicked.connect(self.copyRow)
 
         # generate test-data (only for save)
         self.loadData()
+        self.radioVariables.setChecked(True)
 
     # save to .xlsx
     def saveExcelData(self):
-        rep = QtWidgets.QFileDialog.getSaveFileName(None, 'Выбор места сохранения', '', 'Excel Files (*xlsx);;Excel Files (*.xls*);;CSV Files (*.csv)')
-        print(rep)
+        rep = QtWidgets.QFileDialog.getSaveFileName(None, 'Выбор места сохранения', '', 'Excel Files (*.xlsx *.xls);;CSV Files (*.csv)')
         columnHeaders = []
 
         # create column header list
@@ -66,6 +66,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         if df.size == 0:
             return
 
+        # filling TableWidget columns and rows
         df.fillna('', inplace=True)
         self.tableWidget.setRowCount(df.shape[0])
         self.tableWidget.setColumnCount(df.shape[1])
@@ -83,19 +84,79 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.tableWidget.setColumnWidth(2, 300)
 
     # add rows in tableWidget
-    def addRow(self):
-        currentRow = self.tableWidget.currentRow()
-        count = self.spinBox_2.value()
-        for i in range(count):
-            self.tableWidget.insertRow(currentRow + 1)
+    def addButton(self):
+
+        # if radio selected Rows
+        if self.radioVariables.isChecked():
+            # change radioData
+            # on
+            # radioVariables
+            # in design.ui
+
+            # change after last selected Item
+            if self.tableWidget.selectedIndexes():
+                for i in self.tableWidget.selectedIndexes():
+                    currentRow = i.row()
+                count = self.spinBox_2.value()
+                for i in range(count):
+                    self.tableWidget.insertRow(currentRow + 1)
+
+            # change to tail (default)
+            else:
+                currentRow = self.tableWidget.rowCount()
+                count = self.spinBox_2.value()
+                for i in range(count):
+                    self.tableWidget.insertRow(currentRow)
+
+        # if radio selected Columns
+        else:
+
+            # change after last selected Item
+            if self.tableWidget.selectedIndexes():
+                for i in self.tableWidget.selectedIndexes():
+                    currentColumn = i.column()
+                count = self.spinBox_2.value()
+                for i in range(count):
+                    self.tableWidget.insertColumn(currentColumn + 1)
+
+            # change to tail (default)
+            else:
+                currentColumn = self.tableWidget.columnCount()
+                count = self.spinBox_2.value()
+                for i in range(count):
+                    self.tableWidget.insertColumn(currentColumn)
 
     # remove rows in tableWidget
-    def removeRow(self):
-        if self.tableWidget.rowCount() > 0:
-            currentRow = self.tableWidget.currentRow()
-            count = self.spinBox_2.value()
-            for i in range(count):
-                self.tableWidget.removeRow(currentRow)
+    def removeButton(self):
+
+        # if radio selected Rows
+        if self.radioVariables.isChecked():
+            # change radioData
+            # on
+            # radioVariables
+            # in design.ui
+
+            # change to tail (default)
+            if self.tableWidget.rowCount() > 0:
+                currentRow = self.tableWidget.rowCount()
+                count = self.spinBox_2.value()
+                for i in range(count):
+                    self.tableWidget.removeRow(currentRow - 1)
+
+        # if radio selected Columns
+        else:
+
+            # change to tail (default)
+            if self.tableWidget.columnCount() > 0:
+                currentColumn = self.tableWidget.columnCount()
+                count = self.spinBox_2.value()
+                for i in range(count):
+                    self.tableWidget.removeColumn(currentColumn - 1)
+
+        # clearing WidgetTable
+        if self.tableWidget.rowCount() == 0 or self.tableWidget.columnCount() == 0:
+            self.tableWidget.setColumnCount(0)
+            self.tableWidget.setRowCount(0)
 
     # copy rows in tableWidget
     def copyRow(self):
@@ -137,6 +198,4 @@ def main():
     app.exec()
 
 if __name__ == '__main__':
-    #excel_file_path = 'data_test.xlsx'
-    #worksheet_name = 'Sheet1'
     main()
