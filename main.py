@@ -45,7 +45,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         # generate test-data (only for save)
         self.loadData()
-        self.radioVariables.setChecked(True)
+        self.radioData.setChecked(True)
 
     # save to .xlsx
     def saveExcelData(self):
@@ -100,11 +100,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
             # change after last selected Item
             if self.tableWidget.selectedIndexes():
-                for i in self.tableWidget.selectedIndexes():
-                    currentRow = i.row()
-                count = self.spinBox_2.value()
-                for i in range(count):
-                    self.tableWidget.insertRow(currentRow + 1)
+                self.uniformAddingData()
 
             # change to tail (default)
             else:
@@ -118,11 +114,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
             # change after last selected Item
             if self.tableWidget.selectedIndexes():
-                for i in self.tableWidget.selectedIndexes():
-                    currentColumn = i.column()
-                count = self.spinBox_2.value()
-                for i in range(count):
-                    self.tableWidget.insertColumn(currentColumn + 1)
+                self.uniformAddingData()
 
             # change to tail (default)
             else:
@@ -195,6 +187,19 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         if self.tableWidget.rowCount() < 1 or self.tableWidget.columnCount() < 1:
             self.tableWidget.setColumnCount(0)
             self.tableWidget.setRowCount(0)
+
+    def uniformAddingData(self):
+            for i in self.tableWidget.selectedIndexes():
+                currentRow = i.row()
+                currentColumn = i.column()
+
+            count = self.spinBox_2.value()
+            if self.radioData.isChecked():
+                for i in range(count):
+                    self.tableWidget.insertRow(currentRow + 1)
+            else:
+                for i in range(count):
+                    self.tableWidget.insertColumn(currentColumn + 1)
 
     # copy rows in tableWidget
     def copyRow(self):
