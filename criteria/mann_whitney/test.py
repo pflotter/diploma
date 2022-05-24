@@ -2,9 +2,9 @@ import numpy as np
 from scipy.stats import mannwhitneyu
 
 
-def test(data_1: np.array,
-         data_2: np.array,
-         alpha: float = 0.05) -> np.array:
+def go(data_1: np.array,
+       data_2: np.array,
+       alpha: float = 0.05) -> np.array:
 
     # необходимо передавать данные одного размера
     if len(data_1) != len(data_2):

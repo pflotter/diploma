@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import shapiro
 
 
-def check(data: np.array, alpha: float = 0.05) -> np.array:
+def go(data: np.array, alpha: float = 0.05) -> np.array:
     stat, p = shapiro(data)
     print('Статистика Шапиро-Уилка = %.10f, p=%.10f' % (stat, p))
 
