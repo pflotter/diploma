@@ -31,6 +31,7 @@ class AnotherWindow(QtWidgets.QWidget):
             lineEdit.setAlignment(Qt.AlignRight)
             layout.addRow(label, lineEdit)
 
+
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -179,7 +180,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             # change to tail (default)
             else:
                 currentRow = self.tableWidget.rowCount()
-                count = self.spinBox_2.value()
+                count = self.spinBoxCount.value()
                 for i in range(count):
                     self.tableWidget.insertRow(currentRow)
 
@@ -193,7 +194,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             # change to tail (default)
             else:
                 currentColumn = self.tableWidget.columnCount()
-                count = self.spinBox_2.value()
+                count = self.spinBoxCount.value()
                 for i in range(count):
                     self.tableWidget.insertColumn(currentColumn)
 
@@ -229,7 +230,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
                 else:
                     currentRow = self.tableWidget.rowCount()
-                    count = self.spinBox_2.value()
+                    count = self.spinBoxCount.value()
                     for i in range(count):
                         self.tableWidget.removeRow(currentRow - 1)
 
@@ -254,7 +255,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
                 else:
                     currentColumn = self.tableWidget.columnCount()
-                    count = self.spinBox_2.value()
+                    count = self.spinBoxCount.value()
                     for i in range(count):
                         self.tableWidget.removeColumn(currentColumn - 1)
                     
@@ -268,7 +269,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 currentRow = i.row()
                 currentColumn = i.column()
 
-            count = self.spinBox_2.value()
+            count = self.spinBoxCount.value()
             if self.radioData.isChecked():
                 for i in range(count):
                     self.tableWidget.insertRow(currentRow + 1)
