@@ -1,4 +1,5 @@
 import sys
+from PyQt5.QtCore import Qt
 from PyQt5 import QtWidgets
 import design
 import pandas as pd
@@ -11,25 +12,30 @@ from distribution import definition
 
 import quantitative_indicators
 from quantitative_indicators import definition
+import criteria
+from criteria import shapiro_wilk
+from criteria.shapiro_wilk import test
+
 
 class AnotherWindow(QtWidgets.QWidget):
-    def __init__(self, count: int):
+    def __init__(self, data: np.array):
         super().__init__()
         layout = QtWidgets.QFormLayout(self)
+        self.setWindowTitle('Дескриптивные статистические характеристики')
 
-        for i in range(count):
-            button = QtWidgets.QPushButton(str(i))
+        for i in range(len(data)):
+            label = QtWidgets.QLabel(str(data[i][1]))
             lineEdit = QtWidgets.QLineEdit()
-            lineEdit.setText(str(i + 5))
-            layout.addRow(button, lineEdit)
+            lineEdit.setText(str(data[i][0]))
+            lineEdit.setReadOnly(True)
+            lineEdit.setAlignment(Qt.AlignRight)
+            layout.addRow(label, lineEdit)
 
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.smt = []
-        self.secondCount = 10
-        self.window2 = AnotherWindow(self.secondCount)
+        self.mainParameters = []
 
         # connect buttons and actions with 'def'
         self.btnAddData.clicked.connect(self.addButton)
@@ -47,23 +53,35 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.actionManWhitney.triggered.connect(self.calculateManWhitney)
         self.actionKolmogorovSmirnov.triggered.connect(self.calculateKolmogorovSmirnov)
 
-        self.actionReporting.triggered.connect(lambda checked: self.toggle_window(self.window2))
+        self.actionReporting.triggered.connect(self.getParametersForSecondWindow)
 
         # generate test-data (only for save)
         #self.loadData()
 
-    def toggle_window(self, window):
-            window.show()
+    def getParametersForSecondWindow(self):
+        self.addDataForGraph()
+        tmpValues = []
 
+        tmpValues.append(quantitative_indicators.definition.get_mean(self.mainParameters))
+        tmpValues.append(quantitative_indicators.definition.get_standard_deviation(self.mainParameters))
+        tmpValues.append(quantitative_indicators.definition.get_median(self.mainParameters))
+        tmpValues.append(quantitative_indicators.definition.get_mode(self.mainParameters))
+        tmpValues.append(quantitative_indicators.definition.get_range(self.mainParameters))
+        tmpValues.append(quantitative_indicators.definition.get_interquartile_range(self.mainParameters))
+
+        self.window2 = AnotherWindow(tmpValues)
+        self.window2.show()
+
+    def calculateShapiroWilk(self):
+        self.addDataForGraph()
+        print(self.mainParameters)
+        res = criteria.shapiro_wilk.test(self.mainParameters)
+        #print(res)
 
     def calculateStudentT(self):
         self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
         res = quantitative_indicators.definition.student_t_criterion(self.currentTitle)
         self.label_6.setText(res)
-
-        title = QtWidgets.QLabel(res + ' | test')
-        coeffEdit = QtWidgets.QLineEdit()
-        self.gridLayout.addWidget(self.gridLayout.rowCount(),self.gridLayout.columnCount(), title, coeffEdit)
 
     def calculatePearsonNormal(self):
         self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
@@ -82,9 +100,9 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     # plot graph
     def updateGraphData(self):
-        x1, y1 = distribution.plots.get_xy_plot_values(self.smt)
+        x1, y1 = distribution.plots.get_xy_plot_values(self.mainParameters)
 
-        distribution.plots.show_plot(title=self.currentTitle, data=self.smt)
+        distribution.plots.show_plot(title=self.currentTitle, data=self.mainParameters)
         #self.plot(x1, y1, "", 'black')
 
     # save to .xlsx
@@ -107,23 +125,13 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def addDataForGraph(self):
         temp = []
-        temp_1 = []
+
         self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
         for i in range(self.tableWidget.rowCount()):
             temp.append(self.tableWidget.item(i, 0).text())
 
         temp = list(map(int, temp))
-        print(temp)
-        self.smt = temp
-
-        temp_1 = distribution.definition.check_pearson_correlation_coefficient(self.smt)
-        print(temp_1)
-
-        self.lineMathMean.setText(temp_1[0])
-        self.lineStd.setText(temp_1[1])
-        self.lineCorrNormal.setText(temp_1[2])
-        self.lineCorrLogistic.setText(temp_1[3])
-        self.lineCorrRavnomer.setText(temp_1[4])
+        self.mainParameters = temp
 
     # upload from .xlsx
     def loadExcelData(self):
