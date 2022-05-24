@@ -380,6 +380,8 @@
     <property name="title">
      <string>Отчётность</string>
     </property>
+    <addaction name="actionCheckNormally"/>
+    <addaction name="separator"/>
     <addaction name="actionReporting"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
@@ -440,6 +442,11 @@
   <action name="actionPearson">
    <property name="text">
     <string>Коэффициент корреляции Пирсона</string>
+   </property>
+  </action>
+  <action name="actionCheckNormally">
+   <property name="text">
+    <string>Проверка нормальности распределения</string>
    </property>
   </action>
  </widget>
