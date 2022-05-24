@@ -12,9 +12,11 @@ from distribution import definition
 
 import quantitative_indicators
 from quantitative_indicators import definition
+
 import criteria
-from criteria import shapiro_wilk
 from criteria.shapiro_wilk import test
+from criteria.student import test
+from criteria.mann_whitney import test
 
 
 class AnotherWindow(QtWidgets.QWidget):
@@ -55,11 +57,13 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.actionKolmogorovSmirnov.triggered.connect(self.calculateKolmogorovSmirnov)
 
         self.actionReporting.triggered.connect(self.getParametersForSecondWindow)
-        self.actionCheckNormally.triggered.connect(self.calculateShapiroWilk)
 
+
+        #self.actionCheckNormally.triggered.connect(self.calculateShapiroWilk)
+        self.actionCheckNormally.triggered.connect(self.calculateShapiroWilk)
+        self.actionManWhitney.triggered.connect(self.calculateManWhitney)
         # generate test-data (only for save)
         #self.loadData()
-
 
     # calculate basic criteria 's for future statistic
     def getParametersForSecondWindow(self):
@@ -88,9 +92,39 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.window2.show()
 
     def calculateStudentT(self):
-        self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
-        res = quantitative_indicators.definition.student_t_criterion(self.currentTitle)
-        self.label_6.setText(res)
+        temp_1 = []
+        temp_2 = []
+        currentTitle = []
+
+        countColumns = 2
+
+        for i in range(2):
+            currentTitle.append(self.tableWidget.horizontalHeaderItem(i).text())
+        print(str(currentTitle))
+
+        for i in range(self.tableWidget.rowCount()):
+            temp_1.append(self.tableWidget.item(i, 0).text())
+
+        for i in range(self.tableWidget.rowCount()):
+            temp_2.append(self.tableWidget.item(i, 1).text())
+
+        print(temp_1)
+        print(temp_2)
+        temp_1 = list(map(float, temp_1))
+        temp_2 = list(map(float, temp_2))
+        tmpValues = criteria.student.test.test(data_1=temp_1, data_2=temp_2)
+        print(tmpValues)
+
+        # self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
+        # for i in range(self.tableWidget.rowCount()):
+        #     temp.append(self.tableWidget.item(i, 0).text())
+        #
+        # temp = list(map(int, temp))
+        # self.mainParameters = temp
+        #
+        # self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
+        # res = quantitative_indicators.definition.student_t_criterion(self.currentTitle)
+        # self.label_6.setText(res)
 
     def calculatePearsonNormal(self):
         self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
@@ -98,9 +132,28 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.label_6.setText(res)
 
     def calculateManWhitney(self):
-        self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
-        res = quantitative_indicators.definition.mann_whitney_criterion(self.currentTitle)
-        self.label_6.setText(res)
+        temp_1 = []
+        temp_2 = []
+        currentTitle = []
+
+        countColumns = 2
+
+        for i in range(2):
+            currentTitle.append(self.tableWidget.horizontalHeaderItem(i).text())
+        print(str(currentTitle))
+
+        for i in range(self.tableWidget.rowCount()):
+            temp_1.append(self.tableWidget.item(i, 0).text())
+
+        for i in range(self.tableWidget.rowCount()):
+            temp_2.append(self.tableWidget.item(i, 1).text())
+
+        print(temp_1)
+        print(temp_2)
+        temp_1 = list(map(float, temp_1))
+        temp_2 = list(map(float, temp_2))
+        tmpValues = criteria.mann_whitney.test.test(data_1=temp_1, data_2=temp_2)
+        print(tmpValues)
 
     def calculateKolmogorovSmirnov(self):
         self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
