@@ -13,20 +13,23 @@ import quantitative_indicators
 from quantitative_indicators import definition
 
 class AnotherWindow(QtWidgets.QWidget):
-    def __init__(self):
+    def __init__(self, count: int):
         super().__init__()
-        layout = QtWidgets.QHBoxLayout()
-        self.
-        self.label = QtWidgets.QLabel("Another Window")
-        layout.addWidget(self.label)
-        self.setLayout(layout)
+        layout = QtWidgets.QFormLayout(self)
+
+        for i in range(count):
+            button = QtWidgets.QPushButton(str(i))
+            lineEdit = QtWidgets.QLineEdit()
+            lineEdit.setText(str(i + 5))
+            layout.addRow(button, lineEdit)
 
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.smt = []
-        self.window1 = AnotherWindow()
+        self.secondCount = 10
+        self.window2 = AnotherWindow(self.secondCount)
 
         # connect buttons and actions with 'def'
         self.btnAddData.clicked.connect(self.addButton)
@@ -44,7 +47,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.actionManWhitney.triggered.connect(self.calculateManWhitney)
         self.actionKolmogorovSmirnov.triggered.connect(self.calculateKolmogorovSmirnov)
 
-        self.actionReporting.triggered.connect(lambda checked: self.toggle_window(self.window1))
+        self.actionReporting.triggered.connect(lambda checked: self.toggle_window(self.window2))
 
         # generate test-data (only for save)
         #self.loadData()
