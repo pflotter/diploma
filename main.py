@@ -54,10 +54,13 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.actionKolmogorovSmirnov.triggered.connect(self.calculateKolmogorovSmirnov)
 
         self.actionReporting.triggered.connect(self.getParametersForSecondWindow)
+        self.actionCheckNormally.triggered.connect(self.calculateShapiroWilk)
 
         # generate test-data (only for save)
         #self.loadData()
 
+
+    # calculate basic criteria 's for future statistic
     def getParametersForSecondWindow(self):
         self.addDataForGraph()
         tmpValues = []
@@ -68,15 +71,20 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         tmpValues.append(quantitative_indicators.definition.get_mode(self.mainParameters))
         tmpValues.append(quantitative_indicators.definition.get_range(self.mainParameters))
         tmpValues.append(quantitative_indicators.definition.get_interquartile_range(self.mainParameters))
+        tmpValues.extend(criteria.shapiro_wilk.test.check(self.mainParameters))
 
         self.window2 = AnotherWindow(tmpValues)
         self.window2.show()
 
+    # calculate criteria Shapiro-Wilk, checking normally or not our distribution
     def calculateShapiroWilk(self):
         self.addDataForGraph()
-        print(self.mainParameters)
-        res = criteria.shapiro_wilk.test(self.mainParameters)
-        #print(res)
+        tmpValues = []
+
+        tmpValues.extend(criteria.shapiro_wilk.test.check(self.mainParameters))
+
+        self.window2 = AnotherWindow(tmpValues)
+        self.window2.show()
 
     def calculateStudentT(self):
         self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
