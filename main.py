@@ -9,29 +9,24 @@ import distribution
 from distribution import plots
 from distribution import definition
 
-
-styles = {'color': 'black', 'font-size': '12px'}
+import quantitative_indicators
+from quantitative_indicators import definition
 
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
         self.smt = []
 
-        self.graphWidget.setBackground('#bbccaa')
-        self.graphWidget.setTitle("Демонстрационный пример", **styles)
-        self.graphWidget.setLabel('left', 'Частота выявлений', **styles)
-        self.graphWidget.setLabel('bottom', 'Частота выявлений', **styles)
-        self.graphWidget.showGrid(x=True, y=True)
-
-        # connect buttons with 'def'
-        self.btnLoad.clicked.connect(self.loadExcelData)
-        self.btnSave.clicked.connect(self.saveExcelData)
+        # connect buttons and actions with 'def'
         self.btnAddData.clicked.connect(self.addButton)
         self.btnDeleteData.clicked.connect(self.removeButton)
-        self.btnPirson.clicked.connect(self.addDataForGraph)
         self.btnPlotGraphics.clicked.connect(self.updateGraphData)
+        self.actionLoadFile.triggered.connect(self.loadExcelData)
+        self.actionSaveFile.triggered.connect(self.saveExcelData)
+        self.actionPearson.triggered.connect(self.addDataForGraph)
+        self.actionPearsonNormal.triggered.connect(self.addDataForGraph)
+
 
         # generate test-data (only for save)
         #self.loadData()
@@ -41,7 +36,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         x1, y1 = distribution.plots.get_xy_plot_values(self.smt)
 
         distribution.plots.show_plot(title=self.currentTitle, data=self.smt)
-        self.plot(x1, y1, "", 'black')
+        #self.plot(x1, y1, "", 'black')
 
     # save to .xlsx
     def saveExcelData(self):
@@ -229,7 +224,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     # create graphics, etc.
     def plot(self, x, y, plotname, color):
         pen = pg.mkPen(color=color)
-        self.graphWidget.plot(x, y, name=plotname, pen=pen, symbolSize=12, symbolBrush=(color))
+        #self.graphWidget.plot(x, y, name=plotname, pen=pen, symbolSize=12, symbolBrush=(color))
 
     # generate data (only for save .xlsx)
     def loadData(self):

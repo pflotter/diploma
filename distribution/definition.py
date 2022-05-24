@@ -2,6 +2,7 @@ from scipy.stats import logistic, uniform, norm, pearsonr
 import numpy as np
 
 # Высчитывает мат.Ожидание, СКО и корреляции между распределениями
+
 def check_pearson_correlation_coefficient(data: np.array) -> None:
     data.sort()
     temp = []
