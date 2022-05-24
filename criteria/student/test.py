@@ -2,9 +2,9 @@ import numpy as np
 from scipy.stats import ttest_ind
 
 
-def test(data_1: np.array,
-         data_2: np.array,
-         alpha: float = 0.05) -> np.array:
+def go(data_1: np.array,
+       data_2: np.array,
+       alpha: float = 0.05) -> np.array:
     print('зашли')
 
     # необходимо передавать данные одного размера

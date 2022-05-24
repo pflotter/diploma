@@ -76,7 +76,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         tmpValues.append(quantitative_indicators.definition.get_mode(self.mainParameters))
         tmpValues.append(quantitative_indicators.definition.get_range(self.mainParameters))
         tmpValues.append(quantitative_indicators.definition.get_interquartile_range(self.mainParameters))
-        tmpValues.extend(criteria.shapiro_wilk.test.check(self.mainParameters))
+        tmpValues.extend(criteria.shapiro_wilk.test.go(self.mainParameters))
 
         self.window2 = AnotherWindow(tmpValues)
         self.window2.show()
@@ -86,7 +86,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.addDataForGraph()
         tmpValues = []
 
-        tmpValues.extend(criteria.shapiro_wilk.test.check(self.mainParameters))
+        tmpValues.extend(criteria.shapiro_wilk.test.go(self.mainParameters))
 
         self.window2 = AnotherWindow(tmpValues)
         self.window2.show()
@@ -112,7 +112,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         print(temp_2)
         temp_1 = list(map(float, temp_1))
         temp_2 = list(map(float, temp_2))
-        tmpValues = criteria.student.test.test(data_1=temp_1, data_2=temp_2)
+        tmpValues = criteria.student.test.go(data_1=temp_1, data_2=temp_2)
         print(tmpValues)
 
         # self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
@@ -152,7 +152,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         print(temp_2)
         temp_1 = list(map(float, temp_1))
         temp_2 = list(map(float, temp_2))
-        tmpValues = criteria.mann_whitney.test.test(data_1=temp_1, data_2=temp_2)
+        tmpValues = criteria.mann_whitney.test.go(data_1=temp_1, data_2=temp_2)
         print(tmpValues)
 
     def calculateKolmogorovSmirnov(self):
