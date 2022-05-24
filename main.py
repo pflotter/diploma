@@ -12,11 +12,21 @@ from distribution import definition
 import quantitative_indicators
 from quantitative_indicators import definition
 
+class AnotherWindow(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+        layout = QtWidgets.QHBoxLayout()
+        self.
+        self.label = QtWidgets.QLabel("Another Window")
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.smt = []
+        self.window1 = AnotherWindow()
 
         # connect buttons and actions with 'def'
         self.btnAddData.clicked.connect(self.addButton)
@@ -34,8 +44,13 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.actionManWhitney.triggered.connect(self.calculateManWhitney)
         self.actionKolmogorovSmirnov.triggered.connect(self.calculateKolmogorovSmirnov)
 
+        self.actionReporting.triggered.connect(lambda checked: self.toggle_window(self.window1))
+
         # generate test-data (only for save)
         #self.loadData()
+
+    def toggle_window(self, window):
+            window.show()
 
 
     def calculateStudentT(self):
@@ -43,12 +58,9 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         res = quantitative_indicators.definition.student_t_criterion(self.currentTitle)
         self.label_6.setText(res)
 
-        title = 'hello world'
         title = QtWidgets.QLabel(res + ' | test')
         coeffEdit = QtWidgets.QLineEdit()
-
-        self.gridLayout.addWidget(title, 1, 0)
-        self.gridLayout.addWidget(coeffEdit, 1, 1)
+        self.gridLayout.addWidget(self.gridLayout.rowCount(),self.gridLayout.columnCount(), title, coeffEdit)
 
     def calculatePearsonNormal(self):
         self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()

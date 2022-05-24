@@ -19,7 +19,7 @@ def get_median(data: np.array) -> float:
 
 # мода по выборке data
 def get_mode(data: np.array) -> float:
-    return float(stats.mode(numbers)[0])
+    return float(stats.mode(data)[0])
 
 
 # диапазон значений по выборке data
@@ -30,8 +30,8 @@ def get_range(data: np.array) -> float:
 # межквартильный диапазон по выборке data:
 def get_interquartile_range(data: np.array) -> float:
     tmp = sorted(data)
-    quartile_1 = median(x[:n // 2])
-    quartile_3 = median(tmp[(n + 1) // 2:])
+    quartile_1 = np.median(tmp[:len(tmp) // 2])
+    quartile_3 = np.median(tmp[(len(tmp) + 1) // 2:])
     return quartile_3 - quartile_1
 
 
