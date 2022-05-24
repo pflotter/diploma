@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-
+# Отрисовка переданных данных
 def show_distribution(title: str,
                       four_moments_of_distribution: np.array,
                       x_axis: np.array,
@@ -82,8 +82,9 @@ def show_plot(title: str = "current row", data: np.array = []) -> None:
     ax.set_xlabel(title)
     plt.show()
 
-
-def get_y_plot_values(data: np.array) -> [np.array, np.array]:
+#
+def get_xy_plot_values(data: np.array) -> [np.array, np.array]:
+    # преобразует набор чисел в двух размерную штуковину, высчитывает плотность по У
     plot = sns.kdeplot(data=data)
     line = plot.lines[0]
     x, y = line.get_data()

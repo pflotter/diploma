@@ -11,19 +11,6 @@ from distribution import definition
 
 
 styles = {'color': 'black', 'font-size': '12px'}
-#hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-#temperature_1 = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45, 24, 56]
-#temperature_2 = [50, 35, 44, 22, 38, 32, 27, 38, 32, 44, 65, 11]
-
-# distribution.definition.check_pearson_correlation_coefficient(temperature_1)
-# distribution.plots.show_plot(title="temp1", data=temperature_1)
-# tmp = distribution.plots.get_y_plot_values(temperature_1)[0]
-# print(tmp[0])
-#
-
-#distribution.definition.check_pearson_correlation_coefficient(temperature_1)
-#distribution.plots.show_plot(title="temp1", data=temperature_1)
-
 
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
@@ -51,9 +38,9 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     # plot graph
     def updateGraphData(self):
-        x1, y1 = distribution.plots.get_y_plot_values(self.smt)
+        x1, y1 = distribution.plots.get_xy_plot_values(self.smt)
 
-        distribution.plots.show_plot(self.smt)
+        distribution.plots.show_plot(title=self.currentTitle, data=self.smt)
         self.plot(x1, y1, "", 'black')
 
     # save to .xlsx
@@ -77,7 +64,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def addDataForGraph(self):
         temp = []
         temp_1 = []
-
+        self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
         for i in range(self.tableWidget.rowCount()):
             temp.append(self.tableWidget.item(i, 0).text())
 
