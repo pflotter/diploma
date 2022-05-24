@@ -22,14 +22,48 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.btnAddData.clicked.connect(self.addButton)
         self.btnDeleteData.clicked.connect(self.removeButton)
         self.btnPlotGraphics.clicked.connect(self.updateGraphData)
+
         self.actionLoadFile.triggered.connect(self.loadExcelData)
         self.actionSaveFile.triggered.connect(self.saveExcelData)
         self.actionPearson.triggered.connect(self.addDataForGraph)
         self.actionPearsonNormal.triggered.connect(self.addDataForGraph)
 
+        self.actionStudent.triggered.connect(self.calculateStudentT)
+        self.actionPearsonNormal.triggered.connect(self.calculatePearsonNormal)
+
+        self.actionManWhitney.triggered.connect(self.calculateManWhitney)
+        self.actionKolmogorovSmirnov.triggered.connect(self.calculateKolmogorovSmirnov)
 
         # generate test-data (only for save)
         #self.loadData()
+
+
+    def calculateStudentT(self):
+        self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
+        res = quantitative_indicators.definition.student_t_criterion(self.currentTitle)
+        self.label_6.setText(res)
+
+
+        title = QtWidgets.QLabel(res + ' | test')
+        coeffEdit = QtWidgets.QLineEdit()
+
+        self.gridLayout.addWidget(title, 1, 0)
+        self.gridLayout.addWidget(coeffEdit, 1, 1)
+
+    def calculatePearsonNormal(self):
+        self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
+        res = quantitative_indicators.definition.pearson_normal(self.currentTitle)
+        self.label_6.setText(res)
+
+    def calculateManWhitney(self):
+        self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
+        res = quantitative_indicators.definition.mann_whitney_criterion(self.currentTitle)
+        self.label_6.setText(res)
+
+    def calculateKolmogorovSmirnov(self):
+        self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
+        res = quantitative_indicators.definition.kolmogorov_smirnov_criterion(self.currentTitle)
+        self.label_6.setText(res)
 
     # plot graph
     def updateGraphData(self):
