@@ -17,6 +17,7 @@ import criteria
 from criteria.shapiro_wilk import test
 from criteria.student import test
 from criteria.mann_whitney import test
+from criteria.kruskal_wallis import test
 
 
 class AnotherWindow(QtWidgets.QWidget):
@@ -57,6 +58,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.actionKolmogorovSmirnov.triggered.connect(self.calculateKolmogorovSmirnov)
 
         self.actionReporting.triggered.connect(self.getParametersForSecondWindow)
+
 
 
         #self.actionCheckNormally.triggered.connect(self.calculateShapiroWilk)
@@ -156,9 +158,35 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         print(tmpValues)
 
     def calculateKolmogorovSmirnov(self):
-        self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
-        res = quantitative_indicators.definition.kolmogorov_smirnov_criterion(self.currentTitle)
-        self.label_6.setText(res)
+        temp_1 = []
+        temp_2 = []
+        temp_3 = []
+        currentTitle = []
+
+        countColumns = 3
+
+        for i in range(countColumns):
+            currentTitle.append(self.tableWidget.horizontalHeaderItem(i).text())
+        print(str(currentTitle))
+
+        for i in range(self.tableWidget.rowCount()):
+            temp_1.append(self.tableWidget.item(i, 0).text())
+
+        for i in range(self.tableWidget.rowCount()):
+            temp_2.append(self.tableWidget.item(i, 1).text())
+
+        for i in range(self.tableWidget.rowCount()):
+            temp_3.append(self.tableWidget.item(i, 2).text())
+
+        print(temp_1)
+        print(temp_2)
+        print(temp_3)
+        temp_1 = list(map(float, temp_1))
+        temp_2 = list(map(float, temp_2))
+        temp_3 = list(map(float, temp_3))
+        tmp = [temp_1, temp_2, temp_3]
+        tmpValues = criteria.kruskal_wallis.test.go(all_data=tmp)
+        print(tmpValues)
 
     # plot graph
     def updateGraphData(self):
