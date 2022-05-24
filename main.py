@@ -43,7 +43,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         res = quantitative_indicators.definition.student_t_criterion(self.currentTitle)
         self.label_6.setText(res)
 
-
+        title = 'hello world'
         title = QtWidgets.QLabel(res + ' | test')
         coeffEdit = QtWidgets.QLineEdit()
 
