@@ -116,6 +116,8 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         temp_2 = list(map(float, temp_2))
         tmpValues = criteria.student.test.go(data_1=temp_1, data_2=temp_2)
         print(tmpValues)
+        self.window2 = AnotherWindow(tmpValues)
+        self.window2.show()
 
         # self.currentTitle = self.tableWidget.horizontalHeaderItem(0).text()
         # for i in range(self.tableWidget.rowCount()):
@@ -156,6 +158,8 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         temp_2 = list(map(float, temp_2))
         tmpValues = criteria.mann_whitney.test.go(data_1=temp_1, data_2=temp_2)
         print(tmpValues)
+        self.window2 = AnotherWindow(tmpValues)
+        self.window2.show()
 
     def calculateKolmogorovSmirnov(self):
         temp_1 = []
